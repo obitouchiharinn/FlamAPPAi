@@ -48,9 +48,5 @@ app/src/main/cpp/
 
 
 app/src/main/res/
-# Ignore ALL Java/Kotlin source files
-app/src/main/java/**
 
-# Allow only FrameUploader.kt
-!app/src/main/java/com/androidventure/edgedetector/FrameUploader.kt
 

@@ -44,10 +44,13 @@ app/src/main/cpp/opencv/
 .settings/
 app/src/main/cpp/
 # Ignore ALL Java/Kotlin source files
-app/src/main/java/**
 
-# EXCEPT MainActivity.kt
-!app/src/main/java/com/androidventure/edgedetector/MainActivity.kt
+
 
 app/src/main/res/
+# Ignore ALL Java/Kotlin source files
+app/src/main/java/**
+
+# Allow only FrameUploader.kt
+!app/src/main/java/com/androidventure/edgedetector/FrameUploader.kt
 

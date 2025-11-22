@@ -43,8 +43,11 @@ app/src/main/cpp/opencv/
 .vscode/
 .settings/
 app/src/main/cpp/
-app/src/main/java/\com\androidventure\edgedetector\FrameUploader.kt
-app/src/main/java/\com\androidventure\edgedetector\GLRenderer.kt
-app/src/main/java/\com\androidventure\edgedetector\CameraManager.kt
+# Ignore ALL Java/Kotlin source files
+app/src/main/java/**
+
+# EXCEPT MainActivity.kt
+!app/src/main/java/com/androidventure/edgedetector/MainActivity.kt
+
 app/src/main/res/
 

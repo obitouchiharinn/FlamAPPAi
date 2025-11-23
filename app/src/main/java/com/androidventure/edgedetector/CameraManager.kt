@@ -179,22 +179,45 @@ class CameraManager(
             it.width <= MAX_PREVIEW_WIDTH && it.height <= MAX_PREVIEW_HEIGHT 
         }.maxByOrNull { it.height } ?: choices[0]
     }
-    
+
     private fun imageToByteArray(image: android.media.Image): ByteArray {
+        val width = image.width
+        val height = image.height
+
         val yBuffer = image.planes[0].buffer
         val uBuffer = image.planes[1].buffer
         val vBuffer = image.planes[2].buffer
-        
+
         val ySize = yBuffer.remaining()
         val uSize = uBuffer.remaining()
         val vSize = vBuffer.remaining()
-        
-        val nv21 = ByteArray(ySize + uSize + vSize)
-        
+
+        val nv21 = ByteArray(width * height * 3 / 2)
+
+        // ----- COPY Y -----
+        var pos = 0
         yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-        
+        pos = ySize
+
+        // ----- SAFE UV INTERLEAVING -----
+        val uvPixelStride = image.planes[1].pixelStride
+        val uvRowStride = image.planes[1].rowStride
+        val uvWidth = width / 2
+        val uvHeight = height / 2
+
+        for (row in 0 until uvHeight) {
+            for (col in 0 until uvWidth) {
+                val uvIndex = row * uvRowStride + col * uvPixelStride
+
+                if (uvIndex + 1 < uSize && uvIndex + 1 < vSize) {
+                    // NV21 = V then U
+                    nv21[pos++] = vBuffer.get(uvIndex)
+                    nv21[pos++] = uBuffer.get(uvIndex)
+                }
+            }
+        }
+
         return nv21
     }
+
 }

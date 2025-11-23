@@ -86,10 +86,11 @@ class FrameUploader(private val serverUrl: String) {
                 .build()
             
             // Execute async
+            Log.d(TAG, "Uploading to: $serverUrl, size: ${jpegBytes.size} bytes")
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     errorCount++
-                    Log.w(TAG, "Upload failed: ${e.message} (errors: $errorCount)")
+                    Log.e(TAG, "Upload failed to $serverUrl: ${e.message} (errors: $errorCount)", e)
                     onFailure?.invoke(e)
                 }
                 

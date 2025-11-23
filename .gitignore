@@ -42,7 +42,7 @@ app/src/main/cpp/opencv/
 # IDE
 .vscode/
 .settings/
-app/src/main/cpp/
+
 # Ignore ALL Java/Kotlin source files
 
 

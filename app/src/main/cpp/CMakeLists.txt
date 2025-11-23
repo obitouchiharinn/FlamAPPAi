@@ -1,37 +1,29 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.22.1)
 
-# minimal project name
-project(edgedetection LANGUAGES C CXX)
+project("native-lib")
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# If OpenCV_DIR is provided by Gradle, prefer it
-if (DEFINED OpenCV_DIR)
-  find_package(OpenCV REQUIRED PATHS ${OpenCV_DIR} NO_DEFAULT_PATH)
-else()
-  find_package(OpenCV REQUIRED)
-endif()
+# Add OpenCV
+# Note: You'll need to download OpenCV Android SDK and place it in cpp/opencv/
+set(OpenCV_DIR ${CMAKE_CURRENT_SOURCE_DIR}/opencv/sdk/native/jni/abi-${ANDROID_ABI})
+find_package(OpenCV REQUIRED)
 
-# include OpenCV headers (if found)
-if (OpenCV_FOUND)
-  include_directories(${OpenCV_INCLUDE_DIRS})
-endif()
+# Include directories
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-# Add native source(s) — reference files relative to this folder (no duplicate src path)
-add_library(
-  native-lib
-  SHARED
-  native-lib.cpp   # <- ensure this file exists in this folder
-  EdgeProcessor.cpp   # <- added so EdgeProcessor implementation gets compiled and linked
+# Add native library
+add_library(native-lib SHARED
+        native-lib.cpp
+        edge_processor.cpp
 )
 
 # Link libraries
-find_library(log-lib log)
-
-if (OpenCV_FOUND)
-  target_link_libraries(native-lib ${OpenCV_LIBS} ${log-lib})
-else()
-  target_link_libraries(native-lib ${log-lib})
-endif()
+target_link_libraries(native-lib
+        ${OpenCV_LIBS}
+        android
+        log
+        jnigraphics
+)

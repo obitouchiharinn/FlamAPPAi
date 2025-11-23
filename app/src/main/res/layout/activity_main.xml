@@ -7,18 +7,34 @@
     android:background="@drawable/gradient_background"
     tools:context=".MainActivity">
 
-    <!-- Camera Preview Card -->
+    <!-- Modern Top Title -->
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edge Vision Pro"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:letterSpacing="0.03"
+        android:layout_marginTop="32dp" />
+
+    <!-- Modern Camera Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/previewCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/controlsLayout"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="16dp"
+        app:layout_constraintTop_toBottomOf="@id/appTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/controlsLayout">
 
         <ImageView
             android:id="@+id/imageView"
@@ -28,68 +44,68 @@
             android:scaleType="fitCenter" />
     </androidx.cardview.widget.CardView>
 
-    <!-- FPS Badge -->
-    <!-- FPS Badge (Centered + Smaller) -->
-<LinearLayout
-    android:id="@+id/fpsBadge"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:background="@drawable/fps_badge_background"
-    android:elevation="12dp"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    app:layout_constraintTop_toTopOf="@+id/previewCard"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
-    <ImageView
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginEnd="8dp"
-        android:src="@android:drawable/presence_online"
-        android:tint="#F5E4D7" />
-
-    <TextView
-        android:id="@+id/tvFPS"
+    <!-- FPS Badge (Modern Pill Design) -->
+    <LinearLayout
+        android:id="@+id/fpsBadge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="FPS: 0.0"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:background="@drawable/fps_badge_background"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="14dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:elevation="20dp"
+        android:translationZ="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="@id/previewCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <ImageView
+            android:id="@+id/fpsIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="8dp"
+            android:src="@android:drawable/presence_online"
+            android:tint="#F5E4D7" />
 
-    <!-- Control Panel -->
+        <TextView
+            android:id="@+id/tvFPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FPS: 0.0"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Modern Control Panel -->
     <LinearLayout
         android:id="@+id/controlsLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/control_panel_background"
-        android:elevation="16dp"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="26dp"
+        android:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Title -->
+        <!-- Panel Title -->
         <TextView
+            android:id="@+id/controlTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:text="Edge Detection Controls"
+            android:textSize="18sp"
+            android:textColor="#5D4037"
+            android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="Edge Detection Controls"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:layout_marginBottom="18dp" />
 
-        <!-- Buttons Row -->
+        <!-- Buttons (Modern Pill Buttons) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,37 +115,62 @@
             <Button
                 android:id="@+id/btnToggle"
                 android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_primary"
-                android:drawableTop="@android:drawable/ic_menu_view"
-                android:drawablePadding="8dp"
-                android:drawableTint="#FFFFFF"
-                android:elevation="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Toggle\nMode"
-                android:textAllCaps="false"
+                android:text="Show Edge Detection"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:padding="6dp"
+                android:elevation="10dp" />
+
+            <Button
+                android:id="@+id/btnGrayToggle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_primary"
+                android:text="Gray: Off"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:padding="6dp"
+                android:elevation="10dp" />
+
+            <Button
+                android:id="@+id/btnInvertToggle"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_primary"
+                android:text="Invert: Off"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:padding="6dp"
+                android:elevation="10dp" />
 
             <Button
                 android:id="@+id/btnUpload"
-                android:layout_width="0dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginStart="12dp"
                 android:background="@drawable/button_success"
-                android:drawableTop="@android:drawable/ic_menu_upload"
-                android:drawablePadding="8dp"
-                android:drawableTint="#FFFFFF"
-                android:elevation="8dp"
+                android:elevation="10dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Upload\nFrame"
+                android:padding="6dp"
+                android:text="Upload Frame"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

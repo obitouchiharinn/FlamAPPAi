@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_toggle"
+        android:title="Toggle Mode"
+        android:icon="@android:drawable/ic_menu_view" />
+
+    <item
+        android:id="@+id/menu_gray"
+        android:title="Grayscale On/Off"
+        android:icon="@android:drawable/ic_menu_day" />
+
+    <item
+        android:id="@+id/menu_invert"
+        android:title="Invert On/Off"
+        android:icon="@android:drawable/ic_menu_rotate" />
+
+    <item
+        android:id="@+id/menu_upload"
+        android:title="Upload Frame"
+        android:icon="@android:drawable/ic_menu_upload" />
+
+</menu>

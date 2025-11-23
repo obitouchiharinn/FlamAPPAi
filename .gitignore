@@ -18,6 +18,8 @@ local.properties
 bin/
 gen/
 out/
+# Ignore entire web folder
+web/
 
 # NDK
 obj/
@@ -47,13 +49,7 @@ app/src/main/cpp/opencv/
 
 
 
-app/src/main/res/
+#app/src/main/res/
 # Ignore ALL cpp folder content
-app/src/main/cpp/**
-
-# Allow only selected C++ files
-!app/src/main/cpp/CMakeLists.txt
-!app/src/main/cpp/edge_processor.cpp
-!app/src/main/cpp/edge_processor.h
 
 

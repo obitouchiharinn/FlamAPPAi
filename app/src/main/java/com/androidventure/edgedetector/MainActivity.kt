@@ -45,15 +45,13 @@ class MainActivity : AppCompatActivity() {
     private var lastFpsTime = System.currentTimeMillis()
 
     // Network uploader (replaced FrameUploader usage with a simple internal uploader)
+    // frameUploader remains but is unused if you prefer internal uploader.
     private var frameUploader: FrameUploader? = null
     private var serverUploadUrl: String? = null // set when upload enabled
     private var isUploadEnabled = false
     private var uploadFrameCounter = 0
     private val UPLOAD_EVERY_N_FRAMES = 30 // Upload every 30th frame (~1 FPS at 30fps camera)
     private val isUploading = AtomicBoolean(false) // Prevent concurrent uploads
-
-    // Reuse one OkHttpClient for efficiency
-    private val httpClient: OkHttpClient = OkHttpClient()
 
     // Processing thread
     private val processingThread = HandlerThread("FrameProcessor").apply { start() }
@@ -273,9 +271,6 @@ class MainActivity : AppCompatActivity() {
             val b64 = Base64.encodeToString(pngBytes, Base64.NO_WRAP)
             val payload = "{\"image\":\"data:image/png;base64,$b64\"}"
 
-            // Log start (helps debugging)
-            Log.i(TAG, "Starting upload to $url, bytes=${pngBytes.size}")
-
             val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
             val body = payload.toRequestBody(mediaType)
 
@@ -284,18 +279,15 @@ class MainActivity : AppCompatActivity() {
                 .post(body)
                 .build()
 
-            httpClient.newCall(request).execute().use { resp ->
+            val client = OkHttpClient()
+            client.newCall(request).execute().use { resp ->
                 if (resp.isSuccessful) {
-                    Log.i(TAG, "Upload HTTP ${resp.code} OK")
                     onSuccess()
                 } else {
-                    val msg = "HTTP ${resp.code}: ${resp.message}"
-                    Log.w(TAG, "Upload failed: $msg")
-                    onFailure(msg)
+                    onFailure("HTTP ${resp.code}: ${resp.message}")
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Upload exception", e)
             onFailure(e.message ?: "unknown error")
         }
     }

@@ -4,81 +4,581 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AndroidVenture - Network Frame Receiver</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #5D4037 0%, #8D6E63 25%, #A1887F 50%, #C7A899 75%, #F8DCC1 100%);
+            min-height: 100vh;
+            padding: 0;
+            color: #2c1810;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255,255,255,0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header - Premium Look */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            word-spacing: 0.2em;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Viewer Section - Full Height */
+        .viewer-section {
+            grid-column: 1 / 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInLeft 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .viewer-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .viewer-section h2 {
+            padding: 24px;
+            background: linear-gradient(135deg, #5D4037 0%, #8D6E63 100%);
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .frame-container {
+            position: relative;
+            background: linear-gradient(135deg, rgba(93, 64, 55, 0.15) 0%, rgba(248, 220, 193, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(248, 220, 193, 0.2);
+            border-radius: 16px;
+        }
+
+        #frameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #F8DCC1;
+            font-size: 1.4rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px 50px;
+            border-radius: 16px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(248, 220, 193, 0.3);
+            animation: pulse 2s infinite;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Right Column - Controls & Stats */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeInRight 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-section h2 {
+            color: #5D4037;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #F8DCC1;
+            padding-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(93, 64, 55, 0.05) 0%, rgba(248, 220, 193, 0.1) 100%);
+            border-radius: 14px;
+            border-left: 4px solid #8D6E63;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: linear-gradient(135deg, rgba(93, 64, 55, 0.1) 0%, rgba(248, 220, 193, 0.15) 100%);
+            transform: translateX(5px);
+        }
+
+        .stat-label {
+            color: #5D4037;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            color: #8D6E63;
+            font-weight: 700;
+            font-size: 1.4rem;
+            min-width: 80px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Controls Section */
+        .controls-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .controls-section h2 {
+            color: #5D4037;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #F8DCC1;
+            padding-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5D4037 0%, #8D6E63 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(93, 64, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #A1887F 0%, #C7A899 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(161, 136, 127, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #D84315 0%, #E65100 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(216, 67, 21, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #8D6E63;
+            border: 2px solid #8D6E63;
+        }
+
+        .btn-outline:hover {
+            background: #F8DCC1;
+            color: #2c1810;
+            transform: translateY(-3px);
+            border-color: #F8DCC1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(93, 64, 55, 0.08) 0%, rgba(248, 220, 193, 0.12) 100%);
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 4px solid #F8DCC1;
+            font-size: 0.95rem;
+            color: #2c1810;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #5D4037;
+        }
+
+        .info-box code {
+            background: rgba(93, 64, 55, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #5D4037;
+            font-size: 0.9rem;
+        }
+
+        /* Bottom Section */
+        .bottom-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+            grid-column: 1 / -1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bottom-section h2 {
+            color: #5D4037;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #F8DCC1;
+            padding-bottom: 15px;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .architecture-item {
+            background: linear-gradient(135deg, rgba(93, 64, 55, 0.05) 0%, rgba(248, 220, 193, 0.1) 100%);
+            padding: 25px;
+            border-radius: 14px;
+            border-top: 4px solid #8D6E63;
+            transition: all 0.3s ease;
+        }
+
+        .architecture-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .architecture-item h4 {
+            color: #5D4037;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .architecture-item p {
+            color: #2c1810;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            margin-top: 60px;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer p {
+            margin: 8px 0;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .viewer-section {
+                grid-column: 1 / -1;
+            }
+
+            .right-column {
+                grid-column: 1 / -1;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .bottom-section {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1.05rem;
+            }
+
+            main {
+                gap: 20px;
+            }
+
+            .viewer-section,
+            .stats-section,
+            .controls-section,
+            .bottom-section {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .btn {
+                padding: 14px 24px;
+                font-size: 0.9rem;
+            }
+
+            .stat-item {
+                padding: 14px;
+            }
+
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🌐 Network Frame Receiver</h1>
-            <p>Receives processed frames from Android app via HTTP/WebSocket</p>
+            <h1>🎬 FlamAi Vision Stream</h1>
+            <p>Intelligent Edge Detection & Live Frame Analysis</p>
         </header>
 
         <main>
             <section class="viewer-section">
-                <h2>Received Frame Display</h2>
+                <h2>Live Frame Display</h2>
                 <div class="frame-container">
                     <canvas id="frameCanvas"></canvas>
-                    <div id="loadingIndicator" class="loading">Waiting for frames from Android app...</div>
+                    <div id="loadingIndicator" class="loading">Waiting for frames...</div>
                 </div>
             </section>
 
-            <section class="stats-section">
-                <h2>Frame Statistics</h2>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">FPS:</span>
-                        <span class="stat-value" id="fpsValue">0.0</span>
+            <div class="right-column">
+                <section class="stats-section">
+                    <h2>📊 Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">FPS:</span>
+                            <span class="stat-value" id="fpsValue">0.0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Resolution:</span>
+                            <span class="stat-value" id="resolutionValue">0x0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Frames:</span>
+                            <span class="stat-value" id="frameCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Connection:</span>
+                            <span class="stat-value" id="connectionStatus">Offline</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Resolution:</span>
-                        <span class="stat-value" id="resolutionValue">0x0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Frames Received:</span>
-                        <span class="stat-value" id="frameCount">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Connection:</span>
-                        <span class="stat-value" id="connectionStatus">Disconnected</span>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <section class="controls-section">
-                <h2>Connection Controls</h2>
-                <div class="button-group">
-                    <button id="connectBtn" class="btn btn-primary">Start HTTP Server</button>
-                    <button id="wsConnectBtn" class="btn btn-secondary">Start WebSocket</button>
-                    <button id="testBtn" class="btn btn-outline">Send Test Frame</button>
-                    <button id="clearBtn" class="btn btn-outline">Clear Display</button>
-                </div>
-                <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
-                    <p><strong>HTTP Endpoint:</strong> POST to <code>http://localhost:9000/upload</code></p>
-                    <p><strong>WebSocket:</strong> Connect to <code>ws://localhost:8081</code></p>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-                        Send base64 encoded image data in JSON: <code>{"image": "data:image/png;base64,..."}</code>
-                    </p>
-                </div>
-            </section>
+                <section class="controls-section">
+                    <h2>🎮 Controls</h2>
+                    <div class="button-group">
+                        <button id="wsConnectBtn" class="btn btn-secondary">⚡ WebSocket Connect</button>
+                        <button id="wsDisconnectBtn" class="btn btn-warning">🔌 Disconnect</button>
+                        <button id="clearBtn" class="btn btn-outline">🗑️ Clear</button>
+                    </div>
+                </section>
+            </div>
 
-            <section class="info-section">
-                <h2>How It Works</h2>
-                <div class="tech-stack">
-                    <h3>Network Bridge Architecture:</h3>
-                    <ul>
-                        <li><strong>HTTP POST:</strong> Android sends frame via HTTP POST request</li>
-                        <li><strong>WebSocket:</strong> Real-time bidirectional frame streaming</li>
-                        <li><strong>Base64 Encoding:</strong> Images encoded as base64 strings</li>
-                        <li><strong>Canvas Rendering:</strong> Decoded and displayed on HTML5 Canvas</li>
-                    </ul>
-                </div>
-            </section>
         </main>
 
-        <footer>
-            <p>AndroidVenture - Edge Detection Assessment Project</p>
-            <p>Network Frame Receiver Demo</p>
-        </footer>
+       
     </div>
 
     <script>
@@ -99,22 +599,13 @@
 
             initialize() {
                 console.log('🚀 Network Frame Receiver initialized');
-                this.updateStatus('Disconnected', '#999');
+                this.updateStatus('Offline');
             }
 
             setupEventListeners() {
-                document.getElementById('connectBtn').onclick = () => this.startHTTPListener();
                 document.getElementById('wsConnectBtn').onclick = () => this.connectWebSocket();
-                document.getElementById('testBtn').onclick = () => this.sendTestFrame();
+                document.getElementById('wsDisconnectBtn').onclick = () => this.disconnectWebSocket();
                 document.getElementById('clearBtn').onclick = () => this.clearDisplay();
-            }
-
-            startHTTPListener() {
-                alert('HTTP Upload Endpoint:\n\nSend POST requests with JSON {"image":"data:image/png;base64,..."} to:\nhttp://localhost:9000/upload\n\nTip: Use the WebSocket button to auto-receive frames in real time.');
-                this.httpServerRunning = true;
-                this.updateStatus('HTTP Ready', '#4CAF50');
-                document.getElementById('connectBtn').disabled = true;
-                console.log('📡 HTTP endpoint ready at http://localhost:9000/upload');
             }
 
             connectWebSocket() {
@@ -123,7 +614,7 @@
                     this.websocket = new WebSocket('ws://localhost:8081');
 
                     this.websocket.onopen = () => {
-                        this.updateStatus('WebSocket Connected', '#2196F3');
+                        this.updateStatus('Connected ✓');
                         document.getElementById('wsConnectBtn').disabled = true;
                         console.log('✅ WebSocket connected');
                     };
@@ -133,7 +624,6 @@
                             const data = JSON.parse(evt.data);
                             if (data.type === 'frame' && typeof data.image === 'string') {
                                 this.receiveFrame(data.image);
-                                // FPS accounting
                                 this.fpsCounter++;
                                 const now = performance.now();
                                 if (now - this.lastFrameTime >= 1000) {
@@ -144,95 +634,64 @@
                                 }
                             }
                         } catch (e) {
-                            // Non-JSON messages ignored
+                            console.log('Received message:', evt.data);
                         }
                     };
 
                     this.websocket.onclose = () => {
-                        this.updateStatus('WebSocket Disconnected', '#F44336');
+                        this.updateStatus('Disconnected');
                         document.getElementById('wsConnectBtn').disabled = false;
                         console.log('🔌 WebSocket disconnected');
                     };
 
                     this.websocket.onerror = (err) => {
                         console.error('❌ WebSocket error:', err);
+                        this.updateStatus('Error');
                     };
                 } catch (error) {
                     console.error('❌ WebSocket error:', error);
-                    alert('WebSocket connection failed: ' + error.message);
+                    alert('❌ WebSocket connection failed:\n' + error.message);
                 }
             }
 
-            sendTestFrame() {
-                // Simulate receiving a frame with edge detection
-                console.log('📥 Receiving test frame...');
-                
-                // Create a test frame (edge detection pattern)
-                this.canvas.width = 480;
-                this.canvas.height = 640;
-                
-                // Draw test pattern
-                this.ctx.fillStyle = '#000';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                this.ctx.strokeStyle = '#fff';
-                this.ctx.lineWidth = 2;
-                
-                // Draw some edge detection-like lines
-                for (let i = 0; i < 20; i++) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(Math.random() * this.canvas.width, Math.random() * this.canvas.height);
-                    this.ctx.lineTo(Math.random() * this.canvas.width, Math.random() * this.canvas.height);
-                    this.ctx.stroke();
+            disconnectWebSocket() {
+                if (this.websocket) {
+                    this.websocket.close();
+                    this.updateStatus('Offline');
+                    document.getElementById('wsConnectBtn').disabled = false;
+                    document.getElementById('wsDisconnectBtn').disabled = true;
+                    console.log('🔌 WebSocket manually disconnected');
+                } else {
+                    alert('⚠️ No active WebSocket connection');
                 }
-                
-                // Draw text
-                this.ctx.fillStyle = '#fff';
-                this.ctx.font = '24px Arial';
-                this.ctx.fillText('Test Frame from Android', 50, 320);
-                
-                this.loadingIndicator.style.display = 'none';
-                
-                // Update stats
-                this.frameCount++;
-                document.getElementById('frameCount').textContent = this.frameCount;
-                document.getElementById('resolutionValue').textContent = 
-                    `${this.canvas.width}x${this.canvas.height}`;
-                
-                // Calculate FPS
-                this.fpsCounter++;
-                const currentTime = performance.now();
-                if (currentTime - this.lastFrameTime >= 1000) {
-                    const fps = this.fpsCounter / ((currentTime - this.lastFrameTime) / 1000);
-                    document.getElementById('fpsValue').textContent = fps.toFixed(1);
-                    this.fpsCounter = 0;
-                    this.lastFrameTime = currentTime;
-                }
-                
-                console.log('✅ Frame received and displayed');
             }
 
-            // This method would be called when receiving actual data
             receiveFrame(base64Image) {
                 const img = new Image();
                 img.onload = () => {
-                    this.canvas.width = img.width;
-                    this.canvas.height = img.height;
-                    this.ctx.drawImage(img, 0, 0);
+                    // Swap width and height for portrait mode (rotate 90 degrees)
+                    this.canvas.width = img.height;
+                    this.canvas.height = img.width;
                     
+                    // Rotate canvas 90 degrees clockwise
+                    this.ctx.translate(img.height, 0);
+                    this.ctx.rotate(Math.PI / 2);
+                    
+                    this.ctx.drawImage(img, 0, 0);
                     this.loadingIndicator.style.display = 'none';
                     this.frameCount++;
                     document.getElementById('frameCount').textContent = this.frameCount;
-                    document.getElementById('resolutionValue').textContent = 
-                        `${img.width}x${img.height}`;
+                    document.getElementById('resolutionValue').textContent = `${img.width}x${img.height}`;
+                };
+                img.onerror = () => {
+                    console.error('❌ Failed to load image');
                 };
                 img.src = base64Image;
             }
 
-            updateStatus(text, color) {
+            updateStatus(text) {
                 const statusElement = document.getElementById('connectionStatus');
                 statusElement.textContent = text;
-                statusElement.style.color = color;
             }
 
             clearDisplay() {
@@ -247,21 +706,10 @@
             }
         }
 
-        // Initialize when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             const receiver = new NetworkFrameReceiver();
-            
-            // Expose for debugging
             window.receiver = receiver;
         });
-
-        // Example API endpoint handler (would be on server side in production)
-        // app.post('/upload', (req, res) => {
-        //     const { image } = req.body;
-        //     // Broadcast to connected clients
-        //     receiver.receiveFrame(image);
-        //     res.json({ success: true });
-        // });
     </script>
 </body>
 </html>

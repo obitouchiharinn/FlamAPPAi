@@ -19,7 +19,7 @@ bin/
 gen/
 out/
 # Ignore entire web folder
-web/
+
 
 # NDK
 obj/

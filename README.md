@@ -61,6 +61,71 @@ Useful dev tips
 - Ensure OpenCV libs are included in CMakeLists.txt and packaged under src/main/jniLibs if required.
 
 ---
+<h2>App Screenshots</h2>
+
+<table>
+  <tr>
+    <td align="center">
+      <strong>RAW IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/eaf451e7-776f-4283-9136-fdda8934ef51" width="320">
+    </td>
+    <td align="center">
+      <strong>EDGE DETECTION(CANNY EDGE) IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/a285c2b4-99b5-4538-b579-00b2907594b5" width="320">
+    </td>
+    <td align="center">
+      <strong>CANNY EDGE IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/755ae8a1-9f0e-41ea-98de-e0ce9f2d5ce4" width="320">
+    </td>
+    <td align="center">
+      <strong>NAV BAR</strong><br>
+      <img src="https://github.com/user-attachments/assets/eafeaf0b-58d4-4a88-bb07-954c1a994e04" width="320">
+    </td>
+  
+
+  </tr>
+  
+  <tr>
+    <td align="center">
+      <strong>GRAYSCALE IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/bf5fb04c-63f1-4055-ac33-e23b353bc605" width="320">
+    </td>
+   <td align="center">
+      <strong>GRAYSCALE IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/bf5fb04c-63f1-4055-ac33-e23b353bc605" width="320">
+    </td>
+    <td>
+     <td align="center">
+      <strong>CANNY EDGE FILTER + GRAYSACLE FILTER IMAGE</strong><br>
+      <img src="https://github.com/user-attachments/assets/98b94e84-8c45-4dd1-a727-0fca51aa015f" width="320">
+    </td>
+  </tr>
+
+  
+</table>
+
+
+
+
+WEB APP SCREENSHOT
+
+RAW IMAGE
+<img width="1920" height="1080" alt="Screenshot (1034)" src="https://github.com/user-attachments/assets/27914101-8630-49ca-8526-2fa8ef8aabd9" />
+
+GRAYSACLE FILTER + INVERT FILTER IMAGE
+<img width="1920" height="1080" alt="Screenshot (1038)" src="https://github.com/user-attachments/assets/20be8ce6-41c2-4f72-b21e-f5a007366488" />
+
+INVERT IMAGE
+<img width="1920" height="1080" alt="Screenshot (1037)" src="https://github.com/user-attachments/assets/8e2ab31e-6f56-41bb-a978-422ce9191dbf" />
+
+GRAYSCALE IMAGE
+<img width="1920" height="1080" alt="Screenshot (1036)" src="https://github.com/user-attachments/assets/fd798563-773f-41f2-a7cc-125c200708c3" />
+
+CANNY EDGE IMAGE
+<img width="1920" height="1080" alt="Screenshot (1035)" src="https://github.com/user-attachments/assets/da2d0f22-610f-4fd7-b1c8-0e64df2111e3" />
+
+
+
 
 ## How to Run
 

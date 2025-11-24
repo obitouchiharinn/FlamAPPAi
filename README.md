@@ -3,6 +3,16 @@
 A compact reference for the Android + Web real‑time edge detection project. Use this to get the app building, understand the native/JNI architecture, and run the lightweight TypeScript web viewer.
 
 ---
+<h2>Demo Video</h2>
+
+<p>
+  <a href="https://drive.google.com/drive/folders/1lAMLAQayUHmv4YHG2NgYNgx4uFR9BEFe" target="_blank">
+    ▶️ <strong>Watch Demo Video on Google Drive</strong>
+  </a>
+</p>
+
+
+
 
 ## Key features (implemented)
 - Real‑time camera feed (Camera2 API)

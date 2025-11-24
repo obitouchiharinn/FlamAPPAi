@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/menu_toggle"
-        android:title="Toggle Mode"
+        android:title="Edge Detection Mode"
         android:icon="@android:drawable/ic_menu_view" />
 
     <item
         android:id="@+id/menu_gray"
-        android:title="Grayscale On/Off"
+        android:title="Grayscale Mode"
         android:icon="@android:drawable/ic_menu_day" />
 
     <item
         android:id="@+id/menu_invert"
-        android:title="Invert On/Off"
+        android:title="Invert Mode"
         android:icon="@android:drawable/ic_menu_rotate" />
 
     <item
